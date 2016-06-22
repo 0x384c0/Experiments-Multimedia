@@ -34,38 +34,46 @@ main() {
 
     double amp;
     while (size > 0) {
-        len = (rand() % (BUFSIZ - 2000)) + 2000;
-        shift = (double)((rand() % 500) - 250) / 20.0;
+        len = BUFSIZ-100;
+        //len = (rand() % (BUFSIZ - 2000)) + 2000;
 
-        // printf("size %d.\n", size);
-        // printf("len %d.\n", len);
-        // printf("shift %d.\n", shift);
-        // printf("BUFSIZ %d.\n", BUFSIZ);
-        for (q = 0; q < len/3; q++) {//  <-
-            amp = 30000;
-            if (q < 1000) {
-                amp = (double) q / 1000 * 30000;
-            }
-            if (q > len - 1000) {
-                amp = (double)(len - q) / 1000 * 30000;
-            }
-            pcm[q] = (int16_t)(sin(p / 10000.0) * amp);
-            p += incr;
-            incr += shift;
-            shift *= .999;
-        }
-        size -= fwrite(pcm, sizeof(int16_t), len, stdout); //pipe in to ffmpeg 1 channel 
-        // incr+=(rand()%3)-1;
-        incr *= mults[rand() % (sizeof(mults) / sizeof(double))];
 
-        if (incr < 45000) {
-            incr = 45000;
-        }
-        if (incr > 55000) {
-            incr = 55000;
+
+        // shift = (double)((rand() % 500) - 250) / 20.0;
+        // for (q = 0; q < len; q++) {//  <-
+        //     amp = 30000;
+        //     if (q < 1000) {
+        //         amp = (double) q / 1000 * 30000;
+        //     }
+        //     if (q > len - 1000) {
+        //         amp = (double)(len - q) / 1000 * 30000;
+        //     }
+        //     pcm[q] = (int16_t)(sin(p / 10000.0) * amp);
+        //     p += incr;
+        //     incr += shift;
+        //     shift *= .999;
+        // }
+        // //incr+=(rand()%3)-1;
+        // incr *= mults[rand() % (sizeof(mults) / sizeof(double))];
+        // if (incr < 45000) {
+        //     incr = 45000;
+        // }
+        // if (incr > 55000) {
+        //     incr = 55000;
+        // }
+
+        double 
+        amplitude = 30000,
+        period =  3.2,
+        periodModifyer = (rand()%3)-1;
+
+
+        for (int y = 0; y  < len; y ++) {
+            pcm[y] = (int16_t)(sin(y/(period + periodModifyer)) * amplitude);
         }
 
+        size -= fwrite(pcm, sizeof(int16_t), len, stdout); //pipe in to ffmpeg
     }
-    fprintf(stderr, "Ya ne segfolt!\n");
+    //fprintf(stderr, "Ya ne segfolt!\n");
     return EXIT_SUCCESS;
 }
