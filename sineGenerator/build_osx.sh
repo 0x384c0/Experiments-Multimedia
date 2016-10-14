@@ -1,1 +1,1 @@
-gcc sn.c && ./a.out | ffmpeg -f s16le -ar 44100 -ac 1 -i - -y sound.mp3 && afplay sound.mp3
+gcc sn.c 
