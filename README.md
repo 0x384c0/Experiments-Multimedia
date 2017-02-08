@@ -3,6 +3,7 @@
 tested
 * ascii art visualiser.c
 * sineGenOriginal.c
+* fontsRenderer test_fonts.c
 
 todo
 * flash Pitch shift.fla	<- compile and test
