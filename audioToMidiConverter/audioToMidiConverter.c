@@ -126,10 +126,12 @@ int main(int argc, char** argv) {
             for(w=0; w<127; w++) {
                 int64_t err=pow(huitas_peak[w]-peak,2);
                 if(err<errmin) {
+                    // printf("%d,",errmin);
                     errmin=err;
                     winner=w;
                 }
             }
+            // printf("\n");
             notes[pos][t]=(int)winner;
             // printf("win %d at %d, tr %d\n",(int)winner,pos,t);
             int around=10;
@@ -155,10 +157,10 @@ int main(int argc, char** argv) {
         }
         pos++;
     }
-
+    //print results
     for(w=0; w<HANDS; w++) {
         for(c=0; c<pos; c++) {
-            printf("%d,",notes[c][w]);
+            printf("\n%d",notes[c][w]);
         }
         printf("\n");
     }

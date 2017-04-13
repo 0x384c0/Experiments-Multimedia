@@ -1,14 +1,16 @@
 # Experiments-media
+dependencies:
+* brew install ffmpeg --with-ffplay
 
 tested
 * ascii art visualiser.c
 * sineGenOriginal.c
 * fontsRenderer test_fonts.c
+* rawAudioToMidi.c
 
 todo
 * flash Pitch shift.fla	<- compile and test
 * signal modulation.c   <- compile and test	
-* rawAudioToMidi.c	<- find out how to get mid file
 
 missing
 * player with action meter

@@ -1,5 +1,6 @@
 *.mp3
 *.raw
 *.out
+*.mid
 *.DS_Store
 sampleraw
