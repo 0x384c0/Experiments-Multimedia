@@ -1,1 +1,0 @@
-gcc ascii_art_visualiser.c  -lm -L /usr/local/Cellar/fftw/3.3.5 -lfftw3 -I /usr/local/Cellar/fftw/3.3.5/include

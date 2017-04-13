@@ -1,1 +1,0 @@
-sh build_osx.sh && sh run_osx.sh
