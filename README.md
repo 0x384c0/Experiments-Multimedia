@@ -9,8 +9,10 @@ tested
 * rawAudioToMidi.c
 
 todo
+* ffpatched				<- compile and test
 * flash Pitch shift.fla	<- compile and test
 * signal modulation.c   <- compile and test	
+* muxa					<- compile and test
 
 missing
 * player with action meter
