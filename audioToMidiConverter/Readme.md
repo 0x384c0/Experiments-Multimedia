@@ -1,3 +1,3 @@
 depedencies: 
-brew install midicsv
-brew install timidity
+* brew install midicsv
+* brew install timidity
