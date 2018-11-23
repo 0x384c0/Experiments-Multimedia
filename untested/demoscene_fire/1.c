@@ -1,4 +1,5 @@
 // https://www.youtube.com/embed/s6CzZ7L9tcc
+// gcc 1.c -l MagickWand -I /usr/include/ImageMagick/ && a.out
 
 
 
