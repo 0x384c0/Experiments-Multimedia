@@ -1,0 +1,5 @@
+filter
+*.dSYM
+remuxing
+transcoding
+output.mkv

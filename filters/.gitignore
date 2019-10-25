@@ -1,0 +1,7 @@
+.DS_Store
+*.out
+*.out.dSYM
+*.o
+*.mp4
+*.nut
+*.exe
