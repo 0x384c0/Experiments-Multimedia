@@ -5,5 +5,6 @@ https://gstreamer.freedesktop.org/documentation/index.html?gi-language=c
 * create custom filter
 * create ios app
 * create android app
+* findout, why parser is needed after encoder
 
 
