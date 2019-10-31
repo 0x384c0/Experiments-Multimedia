@@ -4,6 +4,7 @@ all:
 setup_mac_os:
 	# xcode-select --install
 	brew install gst-plugins-good gst-plugins-bad
+	gst-inspect-1.0
 	
 
 uninstall_mac_os:
@@ -22,8 +23,9 @@ test:
 	echo "Video Output raw video"
 	gst-launch-1.0 -q videotestsrc pattern=ball num-buffers=100 ! video/x-raw,height=320,width=240,framerate=30/1,format=RGB ! fdsink | ffplay -autoexit -f rawvideo -pixel_format rgb24 -video_size 240x320 -i -
 
-	# echo "Video Audio Output Mux mpegts"
-	# gst-launch-1.0 \
-	# 	audiotestsrc wave=sine num-buffers=100 ! audioconvert ! faac ! mux. !\
-	# 	videotestsrc pattern=ball num-buffers=100 !  vtenc_h264 ! video/x-h264,width=320,height=240,framerate=30/1 ! h264parse ! mux. ! \
-	# 	mpegtsmux name=mux ! fdsink # | ffplay -autoexit -i -
+	# TODO: findout, why didnt work, if audiotestsrc comes first
+	echo "Video Audio Output Mux mpegts"
+	gst-launch-1.0 \
+		videotestsrc pattern=ball num-buffers=100							! queue ! videoconvert ! vtenc_h264 ! video/x-h264,width=320,height=240,framerate=30/1 ! h264parse ! mux. \
+		audiotestsrc wave=ticks sine-periods-per-tick=100 num-buffers=100	! queue ! audioconvert ! faac ! mux. \
+		mpegtsmux name=mux ! fdsink | ffplay -autoexit -i -
