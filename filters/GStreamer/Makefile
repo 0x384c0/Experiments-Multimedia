@@ -44,3 +44,16 @@ test:
 		alpha method=custom target-r=255 target-g=255 target-b=255 ! mixer.sink_1 \
 		videomixer name=mixer sink_0::zorder=0 sink_1::zorder=1 ! \
 		videoconvert ! vtenc_h264 ! video/x-h264,width=320,height=240,framerate=30/1 ! h264parse ! mpegtsmux ! fdsink | ffplay -autoexit -i -
+
+FILTER_NAME="CustomFilter"
+SOURCE_NAME="gstcustomfilter"
+create_filter:
+	mkdir $(FILTER_NAME) &&\
+	git clone https://gitlab.freedesktop.org/gstreamer/gst-template.git --depth 1 || true &&\
+	cd gst-template/gst-plugin/src &&\
+	../tools/make_element $(FILTER_NAME) &&\
+	mv $(SOURCE_NAME)".c" ../../../$(FILTER_NAME)/ &&\
+	mv $(SOURCE_NAME)".h" ../../../$(FILTER_NAME)/
+
+make_filter:
+	echo TODO
