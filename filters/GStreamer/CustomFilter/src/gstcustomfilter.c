@@ -253,8 +253,20 @@ gst_custom_filter_chain (GstPad * pad, GstObject * parent, GstBuffer * buf)
     fprintf( stderr, "Have data of size %" G_GSIZE_FORMAT" bytes!\n",
         gst_buffer_get_size (buf));
 
+  //process audio samples
+  GstBuffer * bufWritable = gst_buffer_make_writable(buf); //make buffer writable
+  
+  GstMapInfo info;
+  gst_buffer_map(bufWritable,&info,GST_MAP_READWRITE); //get momory with samples
+
+  for (gsize i = 0; i < info.size; i++)
+    info.data[i] *= 2; //amplify samples
+
+  gst_buffer_unmap(bufWritable,&info); //put samples back
+
+
   /* just push out the incoming buffer without touching it */
-  return gst_pad_push (filter->srcpad, buf);
+  return gst_pad_push (filter->srcpad, bufWritable);
 }
 
 

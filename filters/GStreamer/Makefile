@@ -61,3 +61,9 @@ run_filter:
 	meson builddir &&\
 	ninja -C builddir
 	gst-launch-1.0  --gst-plugin-path=CustomFilter/builddir audiotestsrc wave=sine num-buffers=100 ! audioconvert ! customfilter ! faac ! mpegtsmux ! fdsink | ffplay -autoexit -i -
+	ffmpeg -i http://touhouradio.com:8000/.mp3 -t 00:05 -c:a aac -f mpegts  -  | \
+		gst-launch-1.0  --gst-plugin-path=CustomFilter/builddir \
+		fdsrc ! tsparse ! tsdemux ! aacparse ! faad ! \
+		audioresample ! audioconvert ! customfilter ! \
+		faac ! mpegtsmux ! fdsink | \
+		ffplay -autoexit -i -
