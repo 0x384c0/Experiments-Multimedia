@@ -47,13 +47,17 @@ test:
 
 FILTER_NAME="CustomFilter"
 SOURCE_NAME="gstcustomfilter"
-create_filter:
+setup_filter:
 	mkdir $(FILTER_NAME) &&\
 	git clone https://gitlab.freedesktop.org/gstreamer/gst-template.git --depth 1 || true &&\
 	cd gst-template/gst-plugin/src &&\
 	../tools/make_element $(FILTER_NAME) &&\
 	mv $(SOURCE_NAME)".c" ../../../$(FILTER_NAME)/ &&\
 	mv $(SOURCE_NAME)".h" ../../../$(FILTER_NAME)/
+	brew install meson
 
-make_filter:
-	echo TODO
+run_filter:
+	cd CustomFilter &&\
+	meson builddir &&\
+	ninja -C builddir
+	gst-launch-1.0  --gst-plugin-path=CustomFilter/builddir audiotestsrc wave=sine num-buffers=100 ! audioconvert ! customfilter ! faac ! mpegtsmux ! fdsink | ffplay -autoexit -i -

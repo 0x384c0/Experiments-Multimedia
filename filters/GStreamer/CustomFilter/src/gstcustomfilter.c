@@ -60,7 +60,10 @@
 #  include <config.h>
 #endif
 
+#include <stdio.h>
 #include <gst/gst.h>
+#include <gst/audio/audio.h>
+#include <gst/audio/gstaudiofilter.h>
 
 #include "gstcustomfilter.h"
 
@@ -87,13 +90,23 @@ enum
 static GstStaticPadTemplate sink_factory = GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("ANY")
+    GST_STATIC_CAPS (
+      "audio/x-raw, "
+      "format = (string) " GST_AUDIO_NE (S16) ", "
+      "channels = (int) { 1, 2 }, "
+      "rate = (int) [ 8000, 96000 ]"
+      )
     );
 
 static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
     GST_PAD_SRC,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("ANY")
+    GST_STATIC_CAPS (
+      "audio/x-raw, "
+      "format = (string) " GST_AUDIO_NE (S16) ", "
+      "channels = (int) { 1, 2 }, "
+      "rate = (int) [ 8000, 96000 ]"
+      )
     );
 
 #define gst_custom_filter_parent_class parent_class
@@ -237,7 +250,8 @@ gst_custom_filter_chain (GstPad * pad, GstObject * parent, GstBuffer * buf)
   filter = GST_CUSTOMFILTER (parent);
 
   if (filter->silent == FALSE)
-    g_print ("I'm plugged, therefore I'm in.\n");
+    fprintf( stderr, "Have data of size %" G_GSIZE_FORMAT" bytes!\n",
+        gst_buffer_get_size (buf));
 
   /* just push out the incoming buffer without touching it */
   return gst_pad_push (filter->srcpad, buf);
