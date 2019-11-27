@@ -3,7 +3,7 @@ all:
 
 setup_mac_os:
 	# xcode-select --install
-	brew install gst-plugins-good gst-plugins-bad
+	brew install ffmpeg gst-plugins-good gst-plugins-bad gst-libav
 	gst-inspect-1.0
 
 	cd gst-webkit &&\
@@ -14,6 +14,7 @@ setup_mac_os:
 
 uninstall_mac_os:
 	# brew tap ggpeti/rmrec
+	brew rmrec gst-libav
 	brew rmrec gst-plugins-bad
 	brew rmrec gst-plugins-good
 
@@ -55,15 +56,30 @@ setup_filter:
 	mv $(SOURCE_NAME)".c" ../../../$(FILTER_NAME)/ &&\
 	mv $(SOURCE_NAME)".h" ../../../$(FILTER_NAME)/
 	brew install meson
+	echo "add $(SOURCE_NAME) in to $(FILTER_NAME)/meson.build"
 
-run_filter:
+build_filters:
 	cd CustomFilter &&\
 	meson builddir &&\
 	ninja -C builddir
+
+run_filters:
 	gst-launch-1.0  --gst-plugin-path=CustomFilter/builddir audiotestsrc wave=sine num-buffers=100 ! audioconvert ! customfilter ! faac ! mpegtsmux ! fdsink | ffplay -autoexit -i -
+	
+	#  decodebin  will be replaced by  tsparse ! tsdemux ! aacparse ! faad
 	ffmpeg -i http://touhouradio.com:8000/.mp3 -t 00:05 -c:a aac -f mpegts  -  | \
 		gst-launch-1.0  --gst-plugin-path=CustomFilter/builddir \
-		fdsrc ! tsparse ! tsdemux ! aacparse ! faad ! \
-		audioresample ! audioconvert ! customfilter ! \
+		fdsrc ! decodebin ! \
+		audioconvert ! customfilter ! \
 		faac ! mpegtsmux ! fdsink | \
+		ffplay -autoexit -i -
+
+	#  decodebin for video will be replaced by  tsparse ! tsdemux and h264parse ! avdec_h264
+	ffmpeg -i ~/Movies/test.mp4 -t 00:05 -c:v h264 -c:a aac -f mpegts - | \
+		gst-launch-1.0  --gst-plugin-path=CustomFilter/builddir \
+		fdsrc ! decodebin name=demux \
+		mpegtsmux name=mux \
+		demux. ! decodebin ! videoconvert ! customvideofilter ! videoconvert ! vtenc_h264 ! h264parse ! mux. \
+		demux. ! decodebin ! audioconvert ! customfilter ! faac ! mux. \
+		mux. ! fdsink | \
 		ffplay -autoexit -i -

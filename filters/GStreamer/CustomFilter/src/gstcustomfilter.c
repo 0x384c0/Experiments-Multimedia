@@ -102,7 +102,7 @@ static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
     GST_PAD_SRC,
     GST_PAD_ALWAYS,
     GST_STATIC_CAPS (
-      "audio/x-raw, "
+      "audio/x-raw, " //video/x-raw-rgb
       "format = (string) " GST_AUDIO_NE (S16) ", "
       "channels = (int) { 1, 2 }, "
       "rate = (int) [ 8000, 96000 ]"
@@ -297,7 +297,7 @@ customfilter_init (GstPlugin * customfilter)
 #define PACKAGE "myfirstcustomfilter"
 #endif
 
-/* gstreamer looks for this structure to register customfilters
+/* gstreamer looks for this structure to register plugins
  *
  * exchange the string 'Template customfilter' with your customfilter description
  */
