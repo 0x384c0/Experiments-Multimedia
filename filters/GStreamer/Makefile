@@ -80,6 +80,6 @@ run_filters:
 		fdsrc ! decodebin name=demux \
 		mpegtsmux name=mux \
 		demux. ! decodebin ! videoconvert ! customvideofilter ! videoconvert ! vtenc_h264 ! h264parse ! mux. \
-		demux. ! decodebin ! audioconvert ! customfilter ! faac ! mux. \
+		demux. ! decodebin ! audioconvert ! customfilter silent=true ! faac ! mux. \
 		mux. ! fdsink | \
 		ffplay -autoexit -i -
