@@ -6,12 +6,6 @@ setup_mac_os:
 	brew install ffmpeg gst-plugins-good gst-plugins-bad gst-libav
 	gst-inspect-1.0
 
-	cd gst-webkit &&\
-	./autogen.sh &&\
-	brew install webkitgtk &&\
-	./configure
-	
-
 uninstall_mac_os:
 	# brew tap ggpeti/rmrec
 	brew rmrec gst-libav

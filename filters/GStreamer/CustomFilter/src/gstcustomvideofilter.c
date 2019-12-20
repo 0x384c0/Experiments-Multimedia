@@ -67,8 +67,22 @@ gst_customvideofilter_transform_frame (GstVideoFilter * vfilter, GstVideoFrame *
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      
-      dest[0] = src[0];
+
+      //every guint32 - 4 bytes for RGBA
+      guint32
+      r = (src[0] & 0x000000ff),
+      g = (src[0] & 0x0000ff00) >> 1 * 8,
+      b = (src[0] & 0x00ff0000) >> 2 * 8,
+      a = (src[0] & 0xff000000) >> 3 * 8;
+
+      r = r * 2; // multiple red to 2
+      g = g + 120; // shift green channel
+      b = b + x/10; // lines in blue channel
+
+      dest[0] = (r & 0x000000ff) +
+        ((g & 0x000000ff) << 1 * 8) +
+        ((b & 0x000000ff) << 2 * 8) +
+        ((a & 0x000000ff) << 3 * 8);
       
       src += 1;
       dest += 1;
